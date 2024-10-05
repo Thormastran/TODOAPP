@@ -1,79 +1,149 @@
-import "./Todo.css";
-import { useEffect, useState } from 'react';
+import React, { useState } from "react";
+import { HiArchive } from "react-icons/hi";
+import './Todo.css'; 
+
+
 function Todolist() {
-    const [input, setInput] = useState(''); 
-    const [task, setTasks] = useState([]);
-    const [editInfo, setEditInfo] = useState(false);
-    const [currentList, setCurrentList] = useState(null);
-    
-    useEffect(() => {
-      const stored = JSON.parse(localStorage.getItem("task"));
-      if(stored) {
-        setTasks(stored)
-      }
-   }, []);
   
-    const handleSubmit = () => {
-      if (editInfo) {
-      
-        const updatedTasks = task.map((task, index) => 
-          index === currentList ? input : task
-        );
-        setTasks(updatedTasks);
-        setEditInfo(false); 
-        setCurrentList(null);
-      } else {
+  const [tasks, setTasks] = useState([]);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(null);
+   localStorage.setItem('tasks',JSON.stringify(tasks));
+   let data = JSON.parse(localStorage.getItem('tasks'));
+   console.log(data);
   
-        setTasks(prevTasks => [...prevTasks, input]);
-      }
-      setInput(''); 
-    };
-  
-    const handleEdit = (index) => {
-      setEditInfo(true);
-      setCurrentList(index);
-      setInput(task[index]); 
-    };
-  
-    const handleDelete = (index) => {
-      const newTasks = task.filter((_, i) => i !== index); 
-      setTasks(newTasks);
-      
-    
-      if (editInfo && index === currentList) {
-        setEditInfo(false);
-        setInput('');
-      }
-    };
-     
-   
-    return (
-      <div className='todo-container'>
-        <h3>To do list</h3> 
-        <div className="add-todo">      
-        <input type='text' placeholder='what is the task today?' 
-          value={input} 
-          onChange={e => setInput(e.target.value)} 
-        />
-        
-        <button className="btn-submit" onClick={handleSubmit}>
-          {editInfo ? 'Update' : 'Add'}
-        </button>
-        </div>  
-        <div className="btn-todolist">
-        <ul style={{height: 150}}>
-          {task.map((task, index) => (
-            <li key={index}>
-              {task}
-              <button  onClick={() => handleEdit(index)}>Edit</button> 
-              <button onClick={() => handleDelete(index)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-        </div>
-      </div>
-    );
+
+  function handleTitleChange(event) {
+    setNewTaskTitle(event.target.value);
   }
+
+ 
+  function handleDescriptionChange(event) {
+    setNewTaskDescription(event.target.value);
+  }
+
   
+  function addTask() {
+    try {
+      if (newTaskTitle.trim() === "" || newTaskDescription.trim() === "") {
+        throw new Error("Both title and description are empty.");
+      }
+      setTasks((prevTasks) => [
+        ...prevTasks,
+        { title: newTaskTitle, description: newTaskDescription, completed: false }
+      ]);
+  
+      setNewTaskTitle("");
+      setNewTaskDescription("");
+    } catch (error) {
+      console.log([]);
+      alert(error.message);
+    }
+  }
+
+  
+  function deleteTask(index) {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+  }
+
+
+  function toggleTaskCompletion(index) {
+    const updatedTasks = tasks.map((task, i) =>
+      i === index ? { ...task, completed: !task.completed } : task);
+    setTasks(updatedTasks);
+    }
+
+ 
+  function editTask(index) {
+    setIsEditing(true);
+    setCurrentTaskIndex(index);
+    setNewTaskTitle(tasks[index].title);
+    setNewTaskDescription(tasks[index].description);
+  }
+
+  function saveTask() {
+    const updatedTasks = [...tasks];
+    updatedTasks[currentTaskIndex] = {
+      title: newTaskTitle,
+      description: newTaskDescription,
+      completed: updatedTasks[currentTaskIndex].completed
+    };
+    setTasks(updatedTasks);
+    setIsEditing(false);
+    setNewTaskTitle("");
+    setNewTaskDescription("");
+    setCurrentTaskIndex(null);
+  }
+
+  const completedTask = tasks.filter((task) => task.completed).length;
+  const totalTask = tasks.length;  
+  
+  return (
+    <div className="to-do-list">
+      <div className="TaskDone">
+         <h4><HiArchive />ToDoList</h4>
+         <div className="completed-Task">
+            <section className="completed-section">
+            <div>
+              <h2 >Task Done</h2>
+              <p >Keep it up</p>
+            </div>
+            <div>
+              {completedTask}/{totalTask}
+            </div>
+          </section>
+         </div>
+      </div>
+     
+      <div className="todo-input">
+        <div className="todo-input-item">  
+       <label>Title:</label>
+       <input
+        
+          type="text"
+          placeholder="What is task today?"
+          value={newTaskTitle}
+          onChange={handleTitleChange}
+        />
+       
+       </div>
+        <div className="todo-input-item">
+          <label>Description:</label>
+        <input
+          type="text"
+          placeholder="Task Description"
+          value={newTaskDescription}
+          onChange={handleDescriptionChange}
+        />
+        </div>
+       {isEditing ? (
+          <button className="add-btn" onClick={saveTask}>Save</button>
+        ) : (
+          <button className="add-btn" onClick={addTask}>Add</button>
+       )}
+      </div>
+
+      <ol>
+        {tasks.map((task, index) => (
+          <li key={index} className={task.completed ? "completed" : ""}>
+            <span className="text">
+              <strong className="strong-input">Title:{task.title}</strong>  <br />
+              <strong className="strong-input">Description:{task.description}</strong> 
+            </span>
+          
+            <button className="move-btn" onClick={() => toggleTaskCompletion(index)}>
+              {task.completed ? "Unmark" : "Complete"}
+            </button>
+            <button className="edit-btn" onClick={() => editTask(index)}>Edit</button>
+            <button className="delete-btn" onClick={() => deleteTask(index)}>Delete</button>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
 
 export default Todolist;

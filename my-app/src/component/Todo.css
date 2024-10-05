@@ -1,0 +1,158 @@
+body {
+    background-color: black;
+}
+
+.to-do-list {
+    font-family: Arial, sans-serif;
+    margin-top: 10px;
+}
+ @media (max-width: 768px) {
+    .to-do-list {
+      width: 90%;
+      padding: 10px;
+      font-size: 20px;
+    }
+ }
+h4 {
+    margin-top:50px ;
+    text-align: left;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: white;
+    display: flex;
+}
+
+.TaskDone {
+    color: white;
+}
+
+button {
+    font-size: 1.7rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.add-btn {
+   
+    margin-top:35px; 
+    background-color: hsl(125, 47%, 54%);
+}
+
+.add-btn:hover {
+    background-color: hsl(125, 47%, 44%);
+}
+
+.delete-btn {
+    background-color: hsl(10, 90%, 50%);
+}
+
+.delete-btn:hover {
+    background-color: hsl(10, 90%, 40%);
+}
+
+.edit-btn {
+    background-color: hsl(39, 90%, 50%);
+}
+
+.edit-btn:hover {
+    background-color: hsl(39, 90%, 40%);
+}
+
+.move-btn {
+    background-color: hsl(207, 90%, 64%);
+}
+
+.move-btn:hover {
+    background-color: hsl(207, 90%, 54%);
+}
+
+input[type="text"] {
+    font-size: 1.6rem;
+    padding: 10px;
+    border: 2px solid hsla(0, 0%, 80%, 0.5);
+    border-radius: 5px;
+    color: hsla(0, 0%, 0%, 0.5);
+}
+
+ol {
+    padding: 0;
+    margin-left: 100px;
+    margin-right: 100px ;
+}
+
+li {
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 15px;
+    background-color: white;
+    margin-bottom: 10px;
+    border: 3px solid grey;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+li.completed {
+    background-color: lightgreen;
+    text-decoration: line-through;
+}
+
+.text {
+    flex: 1;
+}
+
+.delete-btn, .edit-btn, .move-btn {
+    padding: 8px 12px;
+    font-size: 1.4rem;
+    margin-left: 10px;
+}
+.todo-input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+.todo-input-item{
+   
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 25px;
+  }
+  
+.todo-input-item label{
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 25px;
+}
+.completed-section {
+    border: 1px solid #c2b39a;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    align-self: center;
+    width: 400px;
+    padding: 4px;
+    border-radius: 11px;
+    margin: auto;
+    margin-bottom: 20px;    
+
+}
+.completed-section div:last-child{
+    background-color:#88ab33 ;
+    width: 70px;
+    height: 70px;
+    border-radius: 75px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+}
+
